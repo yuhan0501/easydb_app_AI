@@ -33,24 +33,19 @@ function NotebookMiddleBottom({
       status: string;
     }[]
   >([]);
-  const [isHistoryLoaded, setIsHistoryLoaded] = useState(false);
-
   // 使用 useCallback 缓存历史数据获取函数
   const loadQueryHistory = useCallback(async () => {
-    if (!isHistoryLoaded) {
-      try {
-        const history = (await invoke("sql_history", {})) as {
-          sql: string;
-          created_at: string;
-          status: string;
-        }[];
-        setQueryHistory(history);
-        setIsHistoryLoaded(true);
-      } catch (error) {
-        console.error("Failed to load query history:", error);
-      }
+    try {
+      const history = (await invoke("sql_history", {})) as {
+        sql: string;
+        created_at: string;
+        status: string;
+      }[];
+      setQueryHistory(history);
+    } catch (error) {
+      console.error("Failed to load query history:", error);
     }
-  }, [isHistoryLoaded]);
+  }, []);
 
   // 使用 useCallback 缓存标签页切换处理函数
   const handleTabChange = useCallback(

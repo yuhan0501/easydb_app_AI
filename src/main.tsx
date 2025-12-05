@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { FontSizeProvider } from "./contexts/FontSizeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import App from "./App";
+import { AiAssistantProvider } from "./contexts/AiAssistantProvider";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -14,9 +15,11 @@ createRoot(document.getElementById("root")!).render(
       <ThemeProvider>
         <FontSizeProvider>
           <HeroUIProvider>
-            <main className="light text-foreground bg-background">
-              <App />
-            </main>
+            <AiAssistantProvider>
+              <main className="light text-foreground bg-background">
+                <App />
+              </main>
+            </AiAssistantProvider>
           </HeroUIProvider>
         </FontSizeProvider>
       </ThemeProvider>

@@ -235,7 +235,10 @@ pub async fn register_table(
     table_count: i32,
 ) -> AppResult<i32> {
     if let TableFactor::Table { name, args, .. } = relation {
-        let table_name = format!("table{}", table_count);
+        if args.is_none() {
+            return Ok(table_count);
+        }
+        let table_name = format!("__easydb_source{}", table_count);
         let table_path = get_table_path(args)?;
 
         match name.to_string().as_str() {
@@ -283,6 +286,12 @@ pub async fn convert_table_name(
     query: &mut Box<Query>,
     mut table_count: i32,
 ) -> AppResult<i32> {
+    if let Some(with) = &mut query.with {
+        for cte in &mut with.cte_tables {
+            table_count = convert_table_name(ctx, &mut cte.query, table_count).await?;
+        }
+    }
+
     if let Select(select) = &mut *query.body {
         for table_with_joins in &mut select.from {
             match &mut table_with_joins.relation {

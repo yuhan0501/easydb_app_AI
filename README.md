@@ -7,7 +7,7 @@
 **一个轻量级的桌面数据查询工具，使用 SQL 直接查询本地文件，内置查询引擎**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/shencangsheng/easydb_app)
+[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/yuhan0501/easydb_app_AI)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey.svg)](https://github.com/shencangsheng/easydb_app)
 
 [English](README_EN.md) | [中文](README.md)
@@ -24,10 +24,13 @@ EasyDB 是一个轻量级桌面数据查询工具，基于 Rust 构建，可以�
 
 - 🚀 **高性能**: 基于 Rust 和 DataFusion 引擎，处理大型文件游刃有余
 - 💾 **低内存占用**: 仅需较少的硬件资源
-- 📁 **多格式支持**: CSV、NdJson、JSON、Excel、Parquet 文件格式
+- 📁 **多格式支持**: CSV、NdJson（行式 JSON）、Excel、Parquet 文件格式
 - 🔧 **开箱即用**: 无需文件转换，直接查询
 - 🖥️ **跨平台**: 支持 macOS 和 Windows 平台
 - 🎨 **现代界面**: 基于 Tauri 构建的现代化桌面应用
+- 🤖 **AI SQL 助手**: 支持根据自然语言生成 SQL，并在执行失败时自动尝试修复
+- 📂 **数据源面板**: 左侧 Sources 面板集中管理本地文件与 MySQL 数据源，支持字段预览与别名管理
+- 🧲 **拖拽生成 SQL**: 将文件拖入编辑区，可选择插入完整示例查询或 `read_xxx()` 函数调用
 - 🔍 **完整 SQL 支持**: 支持复杂 SQL 查询，包括 JOIN、子查询、窗口函数等高级特性
 
 ## 📖 更新日志
@@ -78,36 +81,36 @@ DataFusion 是 Apache Arrow 项目的一部分，提供了完整的 SQL 查询�
 ```sql
 -- 查询 CSV 文件
 SELECT *
-FROM read_csv('/path/to/file.csv', infer_schema => false)
-WHERE `age` > 30
+FROM read_csv('/path/to/file.csv', infer_schema => true, has_header => true)
+WHERE "age" > 30
 LIMIT 10;
 
--- 查询 Excel 文件
+-- 查询 Excel 文件（多工作表）
 SELECT *
 FROM read_excel('/path/to/file.xlsx', sheet_name => 'Sheet2')
-WHERE `age` > 30
+WHERE "age" > 30
 LIMIT 10;
 
--- 查询 JSON 文件
+-- 查询行式 JSON（NdJson）文件
 SELECT *
-FROM read_dnjson('/path/to/file.json')
-WHERE `status` = 'active';
+FROM read_ndjson('/path/to/file.ndjson')
+WHERE "status" = 'active';
 
 -- 查询 MySQL 数据库
 SELECT *
 FROM read_mysql('users', conn => 'mysql://user:password@localhost:3306/mydb')
-WHERE `age` > 30
+WHERE "age" > 30
+LIMIT 200;
 ```
 
 ### 支持的文件格式
 
-| 格式    | 函数             | 说明                   |
-| ------- | ---------------- | ---------------------- |
-| CSV     | `read_csv()`     | 支持自定义分隔符和编码 |
-| Excel   | `read_excel()`   | 支持多工作表           |
-| JSON    | `read_json()`    | 支持嵌套结构           |
-| NdJson  | `read_ndjson()`  | 每行一个 JSON 对象     |
-| Parquet | `read_parquet()` | 列式存储格式           |
+| 格式    | 函数             | 说明                               |
+| ------- | ---------------- |------------------------------------|
+| CSV     | `read_csv()`     | 支持自定义分隔符和表头             |
+| Excel   | `read_excel()`   | 支持多工作表（Beta）               |
+| NdJson  | `read_ndjson()`  | 每行一个 JSON 对象（行式 JSON）    |
+| Parquet | `read_parquet()` | 列式存储格式，适合大规模数据分析   |
 
 ## 🚀 快速开始
 
@@ -122,13 +125,7 @@ WHERE `age` > 30
 
 1. **下载安装包**
 
-   - 访问 [Releases](https://github.com/shencangsheng/easydb_app/releases) 页面
-   - 下载适合您系统的安装包
-
-2. **安装应用**
-
-   - **macOS**: 下载 `.dmg` 文件，拖拽到应用程序文件夹
-   - **Windows**: 下载 `.exe` 文件，运行安装程序
+   - 待完善
 
 ## ❓ 常见问题
 
@@ -202,14 +199,19 @@ SELECT * FROM table WHERE "id" = '1';
 
 ```bash
 # 克隆仓库
-git clone https://github.com/shencangsheng/easydb_app.git
-cd easydb_app
+git clone https://github.com/yuhan0501/easydb_app_AI.git
+cd easydb_app_AI
 
-# 启动开发服务器
-cargo tauri dev
+# 安装前端依赖
+npm install
 
-# 构建应用
-cargo tauri build
+# 启动前端 + 桌面壳开发环境
+npm run dev          # 启动 Vite 前端（浏览器预览）
+npm run tauri dev    # 启动 Tauri 桌面应用
+
+# 构建生产包
+npm run build        # 构建前端静态资源
+npm run tauri build  # 打包桌面应用（需要 Rust 工具链）
 ```
 
 ## 📄 许可证
@@ -252,8 +254,5 @@ MIT © Cangsheng Shen
 
 **⭐ 如果这个项目对您有帮助，请给我们一个 Star！**
 
-Made with ❤️ by [Cangsheng Shen](https://github.com/shencangsheng)
 
 </div>
-
-[![Star History Chart](https://api.star-history.com/svg?repos=shencangsheng/easydb_app&type=date&legend=top-left)](https://www.star-history.com/#shencangsheng/easydb_app&type=date&legend=top-left)

@@ -80,6 +80,15 @@ pub async fn fetch(
             err
         })?;
 
+        if records.is_empty() {
+            insert_query_history(&app, &sql, "successful")?;
+            return Ok(FetchResult {
+                header: Vec::new(),
+                rows: Vec::new(),
+                query_time: time_difference_from_now(start),
+            });
+        }
+
         let row = &records[0];
         let width = row.columns().len();
 
