@@ -225,9 +225,8 @@ function NotebookLeft({ source, setSource, aiPanelData }: NotebookLeftProps) {
     value: string,
     commit?: boolean
   ) => {
-    if (commit || value.trim().length) {
-      updateSource(id, { alias: value });
-    }
+    // 允许把表名清空，不再强制保留最后一个字符
+    updateSource(id, { alias: value });
   };
 
   const renderFieldList = (fields: string[], parentKey: string) => {
@@ -347,15 +346,18 @@ function NotebookLeft({ source, setSource, aiPanelData }: NotebookLeftProps) {
                     wordBreak: "break-all",
                   }}
                 >
-                  {item.alias}
+                  {item.fileName}
                 </div>
                 <Button
                   size="sm"
                   variant="light"
                   isIconOnly
-                  onPress={() => copyToClipboard(item.alias)}
+                  onPress={() => {
+                    setSources((prev) => prev.filter((source) => source.id !== item.id));
+                    aiPanelData?.handleRemoveAiSource?.(item.id);
+                  }}
                 >
-                  <FontAwesomeIcon icon={faCopy} />
+                  <FontAwesomeIcon icon={faTrashCan} />
                 </Button>
               </div>
               <div
@@ -639,7 +641,10 @@ function NotebookLeft({ source, setSource, aiPanelData }: NotebookLeftProps) {
               <Button
                 startContent={<FontAwesomeIcon icon={faTrashCan} />}
                 variant="light"
-                onPress={() => aiPanelData?.clearAllAiSources?.()}
+                onPress={() => {
+                  setSources([]);
+                  aiPanelData?.clearAllAiSources?.();
+                }}
                 isDisabled={aiPanelBusy}
               >
                 清除全部

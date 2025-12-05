@@ -24,10 +24,13 @@ EasyDB is a lightweight desktop data query tool built with Rust that queries loc
 
 - 🚀 **High Performance**: Built on Rust and DataFusion engine, effortlessly handles large files
 - 💾 **Low Memory Usage**: Requires minimal hardware resources
-- 📁 **Multi-format Support**: CSV, NdJson, JSON, Excel, Parquet file formats
+- 📁 **Multi-format Support**: CSV, NdJson (line-delimited JSON), Excel, Parquet file formats
 - 🔧 **Ready to Use**: No file conversion required, query directly
 - 🖥️ **Cross-platform**: Supports macOS and Windows platforms
 - 🎨 **Modern Interface**: Modern desktop application built with Tauri
+- 🤖 **AI SQL Assistant**: Generate SQL from natural language and auto-repair failed queries with LLMs
+- 📂 **Sources Panel**: Manage local files & MySQL data sources on the left sidebar with previews and aliases
+- 🧲 **Drag & Drop SQL Helper**: Drop files into the editor to insert a full example query or `read_xxx()` call
 - 🔍 **Complete SQL Support**: Supports complex SQL queries, including JOINs, subqueries, window functions, and other advanced features
 
 ## 📖 Changelog
@@ -78,36 +81,36 @@ DataFusion is part of the Apache Arrow project, providing complete SQL query cap
 ```sql
 -- Query CSV files
 SELECT *
-FROM read_csv('/path/to/file.csv', infer_schema => false)
-WHERE `age` > 30
+FROM read_csv('/path/to/file.csv', infer_schema => true, has_header => true)
+WHERE "age" > 30
 LIMIT 10;
 
--- Query Excel files
+-- Query Excel files (multiple sheets)
 SELECT *
 FROM read_excel('/path/to/file.xlsx', sheet_name => 'Sheet2')
-WHERE `age` > 30
+WHERE "age" > 30
 LIMIT 10;
 
--- Query JSON files
+-- Query line-delimited JSON (NdJson) files
 SELECT *
-FROM read_json('/path/to/file.json')
-WHERE `status` = 'active';
+FROM read_ndjson('/path/to/file.ndjson')
+WHERE "status" = 'active';
 
 -- Query MySQL database
 SELECT *
 FROM read_mysql('users', conn => 'mysql://user:password@localhost:3306/mydb')
-WHERE `age` > 30
+WHERE "age" > 30
+LIMIT 200;
 ```
 
 ### Supported File Formats
 
-| Format  | Function         | Description                             |
-| ------- | ---------------- | --------------------------------------- |
-| CSV     | `read_csv()`     | Supports custom delimiters and encoding |
-| Excel   | `read_excel()`   | Supports multiple worksheets            |
-| JSON    | `read_json()`    | Supports nested structures              |
-| NdJson  | `read_ndjson()`  | One JSON object per line                |
-| Parquet | `read_parquet()` | Columnar storage format                 |
+| Format  | Function         | Description                                      |
+| ------- | ---------------- |-------------------------------------------------|
+| CSV     | `read_csv()`     | Supports custom delimiters and headers          |
+| Excel   | `read_excel()`   | Supports multiple worksheets (Beta)             |
+| NdJson  | `read_ndjson()`  | One JSON object per line (line-delimited JSON)  |
+| Parquet | `read_parquet()` | Columnar storage format for large-scale analytics|
 
 ## 🚀 Quick Start
 
@@ -205,11 +208,16 @@ We welcome contributions in all forms!
 git clone https://github.com/shencangsheng/easydb_app.git
 cd easydb_app
 
-# Start development server
-cargo tauri dev
+# Install frontend dependencies
+npm install
 
-# Build application
-cargo tauri build
+# Start frontend + desktop shell in development
+npm run dev          # Start Vite frontend (browser preview)
+npm run tauri dev    # Start Tauri desktop app
+
+# Build production bundles
+npm run build        # Build frontend assets
+npm run tauri build  # Package desktop app (requires Rust toolchain)
 ```
 
 ## 📄 License
