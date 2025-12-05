@@ -7,7 +7,7 @@
 **一个轻量级的桌面数据查询工具，使用 SQL 直接查询本地文件，内置查询引擎**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/shencangsheng/easydb_app)
+[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/yuhan0501/easydb_app_AI.git)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey.svg)](https://github.com/shencangsheng/easydb_app)
 
 [English](README_EN.md) | [中文](README.md)
@@ -29,7 +29,7 @@ EasyDB 是一个轻量级桌面数据查询工具，基于 Rust 构建，可以�
 - 🖥️ **跨平台**: 支持 macOS 和 Windows 平台
 - 🎨 **现代界面**: 基于 Tauri 构建的现代化桌面应用
 - 🔍 **完整 SQL 支持**: 支持复杂 SQL 查询，包括 JOIN、子查询、窗口函数等高级特性
-
+- 📦 **AI SQL 助手**: 根据自然语言生成或修复 SQL
 ## 📖 更新日志
 
 [更新日志](CHANGELOG.md)
@@ -72,6 +72,22 @@ DataFusion 是 Apache Arrow 项目的一部分，提供了完整的 SQL 查询�
 **版本演进**: v1.0 版本曾使用 Polars 引擎，虽然 Polars 在流式计算和内存占用方面表现优异，但在复杂 SQL 查询支持上存在限制。v2.0 版本切换回 DataFusion，以获得更完整的 SQL 支持，同时保持了良好的性能和资源利用效率。
 
 ## 📚 使用指南
+
+## AI SQL 助手
+
+EasyDB 内置了一个可配置的 AI SQL 助手，通过调用 Tauri 后端暴露的 AI 命令，与任意兼容 OpenAI 的 chat/completions 接口对接。
+
+•  两种模式
+◦  ai（建议模式）：输入自然语言需求，自动生成 SQL
+◦  expert（专家模式）：更贴近原始 SQL / 精细控制
+•  两类核心能力
+◦  generateSqlWithModel：根据需求生成 SQL + 可选解释
+◦  repairSqlWithModel：对运行失败的 SQL 进行修复重写
+•  可配置的模型参数
+◦  Provider 类型（OpenAI 兼容）
+◦  Base URL、API Key
+◦  模型名（如 gpt-4o-mini 等）
+◦  温度、最大 Token、重试次数
 
 ### 基本语法
 
@@ -222,7 +238,6 @@ MIT © Cangsheng Shen
 
 **Cangsheng Shen**
 
-- GitHub: [@shencangsheng](https://github.com/shencangsheng)
 - Email: shencangsheng@126.com
 
 ## 🙏 致谢
@@ -234,26 +249,5 @@ MIT © Cangsheng Shen
 - [React](https://reactjs.org/) - 用户界面库
 - [HeroUI](https://heroui.com/) - 现代化 UI 组件库
 - [datafusion-contrib](https://github.com/datafusion-contrib) - DataFusion 扩展
+- GitHub: [@shencangsheng](https://github.com/shencangsheng)
 
-### 贡献者
-
-<a href="https://github.com/shencangsheng/easydb_app/contributors">
-  <img src="https://contrib.rocks/image?repo=shencangsheng/easydb_app" /></a>
-
-## 📞 联系我们
-
-- 🐛 **问题反馈**: [GitHub Issues](https://github.com/shencangsheng/easydb_app/issues)
-- 💬 **讨论交流**: [GitHub Discussions](https://github.com/shencangsheng/easydb_app/discussions)
-- 📧 **邮件联系**: shencangsheng@126.com
-
----
-
-<div align="center">
-
-**⭐ 如果这个项目对您有帮助，请给我们一个 Star！**
-
-Made with ❤️ by [Cangsheng Shen](https://github.com/shencangsheng)
-
-</div>
-
-[![Star History Chart](https://api.star-history.com/svg?repos=shencangsheng/easydb_app&type=date&legend=top-left)](https://www.star-history.com/#shencangsheng/easydb_app&type=date&legend=top-left)
