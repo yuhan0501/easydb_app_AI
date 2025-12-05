@@ -2,9 +2,9 @@
 
 <div align="center">
 
-![EasyDB Logo](public/128x128.png)
+![EasyDB Logo](public/logo.png)
 
-**A lightweight desktop data query tool that lets you query local files directly with SQL, backed by a built-in query engine.**
+**A lightweight desktop data query tool that uses SQL to query local files directly with built-in query engine**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/yuhan0501/easydb_app_AI.git)
@@ -22,14 +22,16 @@ EasyDB is a lightweight desktop data query tool built with Rust that lets you qu
 
 ## ✨ Core Features
 
-- 🚀 **High performance**: Powered by Rust and the DataFusion engine, designed for large files
-- 💾 **Low memory footprint**: Works well on machines with limited resources
-- 📁 **Multiple formats**: Supports CSV, NdJson, JSON, Excel, Parquet and more
-- 🔧 **Ready to use**: Query files directly without conversion
-- 🖥️ **Cross‑platform**: Runs on both macOS and Windows
-- 🎨 **Modern UI**: Desktop app built with Tauri
-- 🔍 **Full SQL support**: Complex SQL, including JOINs, subqueries, window functions
-- 📦 **AI SQL assistant**: Generate or repair SQL from natural language
+- 🚀 **High Performance**: Built on Rust and DataFusion engine, effortlessly handles large files
+- 💾 **Low Memory Usage**: Requires minimal hardware resources
+- 📁 **Multi-format Support**: CSV, NdJson (line-delimited JSON), Excel, Parquet file formats
+- 🔧 **Ready to Use**: No file conversion required, query directly
+- 🖥️ **Cross-platform**: Supports macOS and Windows platforms
+- 🎨 **Modern Interface**: Modern desktop application built with Tauri
+- 🤖 **AI SQL Assistant**: Generate SQL from natural language and auto-repair failed queries with LLMs
+- 📂 **Sources Panel**: Manage local files & MySQL data sources on the left sidebar with previews and aliases
+- 🧲 **Drag & Drop SQL Helper**: Drop files into the editor to insert a full example query or `read_xxx()` call
+- 🔍 **Complete SQL Support**: Supports complex SQL queries, including JOINs, subqueries, window functions, and other advanced features
 
 ## 📖 Changelog
 
@@ -37,80 +39,64 @@ EasyDB is a lightweight desktop data query tool built with Rust that lets you qu
 
 ## 🗺️ Features & Roadmap
 
-- [x] `read_csv()`
-- [x] `read_tsv()`
-- [x] `read_ndjson()`
-- [ ] `read_json()`
-- [x] `read_excel()`
-- [x] `read_parquet()`
-- [ ] Excel lazy‑loading performance optimizations
-- [ ] Better data type compatibility for Excel
-- [ ] Multiple session windows
-- [x] Drag & drop files to auto‑generate SQL
-- [ ] Directory browsing
+- [x] read_csv()
+- [x] read_tsv()
+- [x] read_ndjson()
+- [ ] read_json()
+- [x] read_excel()
+- [x] read_parquet()
+- [ ] Excel lazy loading performance optimization
+- [ ] Excel enhanced data type compatibility
+- [ ] Multi-session window support
+- [x] Drag & drop file automatically generate SQL statement
+- [ ] Directory browsing support
 - [ ] S3 remote file support
-- [ ] Query files directly on remote servers
-- [ ] Data visualization
-- [x] Export query results
-- [x] Export query results as SQL statements (INSERT, UPDATE)
-- [x] `read_mysql()`
+- [ ] Support for direct querying of server files
+- [ ] Data visualization support
+- [x] Query result export functionality
+- [x] Export SQL statements (Insert, Update)
+- [x] read_mysql()
 
 ## 🛠️ Technical Architecture
 
-### Core Tech Stack
+### Core Technology Stack
 
 - **Frontend**: React + TypeScript + Vite
-- **Desktop shell / backend**: Rust + Tauri
-- **Query engine**: [apache/datafusion](https://github.com/apache/datafusion)
-- **UI framework**: HeroUI + Tailwind CSS
+- **Backend**: Rust + Tauri
+- **Query Engine**: [apache/datafusion](https://github.com/apache/datafusion)
+- **UI Framework**: HeroUI + Tailwind CSS
 
-### Query Engine Choice
+### Query Engine Selection
 
-**Current engine**: DataFusion
+**Currently Using**: DataFusion
 
-DataFusion is part of the Apache Arrow project and provides a full SQL execution engine, including support for complex SQL syntax such as multi‑table JOINs, subqueries and window functions. Compared with Polars, DataFusion offers more complete SQL compatibility, which better fits complex analytical workloads.
+DataFusion is part of the Apache Arrow project, providing complete SQL query capabilities and supporting complex SQL syntax, including multi-table JOINs, subqueries, window functions, and other advanced features. Compared to Polars, DataFusion offers more comprehensive SQL compatibility, meeting more complex query requirements.
 
-**Version history**: Version v1.0 used the Polars engine. Polars performs very well for streaming workloads and memory usage, but has limitations around full SQL support. From v2.0 onwards EasyDB switched back to DataFusion to regain full SQL compatibility while keeping strong performance and efficient resource usage.
+**Version Evolution**: Version v1.0 previously used the Polars engine. While Polars excelled in stream processing and memory usage, it had limitations in supporting complex SQL queries. Version v2.0 switched back to DataFusion to gain more complete SQL support while maintaining good performance and resource utilization efficiency.
 
 ## 📚 User Guide
-
-## AI SQL Assistant
-
-EasyDB ships with a configurable AI SQL assistant. It talks to the Tauri backend, which exposes AI commands that can call any OpenAI‑compatible `chat/completions` API.
-
-- **Two working modes**
-  - `ai` (recommended): describe your requirement in natural language and get SQL automatically
-  - `expert`: closer to raw SQL, giving you more fine‑grained control
-- **Two core capabilities**
-  - `generateSqlWithModel`: generate SQL (plus optional explanation) from a requirement
-  - `repairSqlWithModel`: rewrite and fix SQL that failed to execute
-- **Configurable model parameters**
-  - Provider type (OpenAI‑compatible)
-  - Base URL and API key
-  - Model name (for example `gpt-4o-mini`)
-  - Temperature, max tokens, retry limit
 
 ### Basic Syntax
 
 ```sql
--- Query a CSV file
+-- Query CSV files
 SELECT *
 FROM read_csv('/path/to/file.csv', infer_schema => false)
 WHERE `age` > 30
 LIMIT 10;
 
--- Query an Excel file
+-- Query Excel files
 SELECT *
 FROM read_excel('/path/to/file.xlsx', sheet_name => 'Sheet2')
 WHERE `age` > 30
 LIMIT 10;
 
--- Query a JSON file
+-- Query JSON files
 SELECT *
-FROM read_dnjson('/path/to/file.json')
+FROM read_json('/path/to/file.json')
 WHERE `status` = 'active';
 
--- Query a MySQL database
+-- Query MySQL database
 SELECT *
 FROM read_mysql('users', conn => 'mysql://user:password@localhost:3306/mydb')
 WHERE `age` > 30
@@ -118,32 +104,25 @@ WHERE `age` > 30
 
 ### Supported File Formats
 
-| Format  | Function         | Description                                  |
-| ------- | ---------------- | -------------------------------------------- |
-| CSV     | `read_csv()`     | Supports custom delimiters and encoding      |
-| Excel   | `read_excel()`   | Supports multiple worksheets                 |
-| JSON    | `read_json()`    | Supports nested structures                   |
-| NdJson  | `read_ndjson()`  | One JSON object per line                     |
-| Parquet | `read_parquet()` | Columnar storage format                      |
+| Format  | Function         | Description                             |
+| ------- | ---------------- | --------------------------------------- |
+| CSV     | `read_csv()`     | Supports custom delimiters and encoding |
+| Excel   | `read_excel()`   | Supports multiple worksheets            |
+| JSON    | `read_json()`    | Supports nested structures              |
+| NdJson  | `read_ndjson()`  | One JSON object per line                |
+| Parquet | `read_parquet()` | Columnar storage format                 |
 
 ## 🚀 Quick Start
 
 ### System Requirements
 
-- **macOS**: 10.15+ (Catalina or later)
-- **Windows**: Windows 10 or later
-- **Memory**: 4 GB RAM or more recommended
-- **Disk space**: At least 100 MB free
+- **macOS**: 10.15+ (Catalina or higher)
+- **Windows**: Windows 10 or higher
+- **Memory**: Recommended 4GB or more
+- **Storage**: At least 100MB available space
 
 ### Installation
-
-1. **Download installer**
-   - Visit the [Releases](https://github.com/shencangsheng/easydb_app/releases) page
-   - Download the installer that matches your OS
-2. **Install application**
-   - **macOS**: Download the `.dmg` file and drag the app into the `Applications` folder
-   - **Windows**: Download the `.exe` and run the installer
-
+ TBD
 ## ❓ Frequently Asked Questions
 
 ### macOS: “App is damaged and cannot be opened”
@@ -183,7 +162,7 @@ SELECT "id", "name" FROM table WHERE "id" = 1;
 SELECT `id`, `name` FROM table WHERE `id` = 1;
 ```
 
-- String values in `WHERE` clauses use **single quotes**:
+String values in WHERE clauses should be wrapped in single quotes, for example:
 
 ```sql
 SELECT * FROM table WHERE "id" = '1';
@@ -191,62 +170,69 @@ SELECT * FROM table WHERE "id" = '1';
 
 ## 📖 Project Background
 
-### From Server to Desktop App
+### From Server to App
 
-[EasyDB Server](https://github.com/shencangsheng/easy_db) is primarily deployed on Linux servers as a web service for querying large text files efficiently. Although Docker deployments are available, day‑to‑day usage on macOS is still not very convenient.
+[EasyDB Server](https://github.com/shencangsheng/easy_db) is mainly deployed on Linux servers as a web service supporting efficient querying of large-scale text files. Although Docker deployment solutions are provided, usage on macOS is still not convenient enough.
 
-To improve the local experience on personal machines, EasyDB App was created as a desktop client specifically optimized for macOS and Windows.
+For this reason, I developed the EasyDB App client, specifically optimized for macOS and Windows platforms to improve the local user experience.
 
-### Naming
+### Project Naming
 
-To distinguish the two projects:
+To better distinguish between the two projects:
 
-- **EasyDB Server**: Server‑side project based on DataFusion
-- **EasyDB App**: Desktop client project based on DataFusion (v2.0+)
+- **EasyDB Server**: Server-side version, based on DataFusion
+- **EasyDB App**: Desktop client version, based on DataFusion (v2.0+)
 
 ## 🤝 Contributing
 
-We welcome all kinds of contributions.
+We welcome contributions in all forms!
 
-### How to contribute
+### How to Contribute
 
-1. **Fork** this repository.
-2. Create a feature branch: `git checkout -b feature/AmazingFeature`.
-3. Commit your changes: `git commit -m 'Add some AmazingFeature'`.
-4. Push to your branch: `git push origin feature/AmazingFeature`.
-5. Open a **Pull Request**.
+1. **Fork** this repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a **Pull Request**
 
-### Development environment
+### Development Environment
 
 ```bash
-# Clone the repo
+# Clone repository
 git clone https://github.com/shencangsheng/easydb_app.git
 cd easydb_app
 
-# Start the dev server
+# Start development server
 cargo tauri dev
 
-# Build the app
+# Build application
 cargo tauri build
 ```
 
 ## 📄 License
 
-MIT © Cangsheng Shen
+A short snippet describing the license (MIT)
 
-## 👨‍💻 Author
-
-**Cangsheng Shen**
-
-- Email: shencangsheng@126.com
 
 ## 🙏 Acknowledgments
 
-Thanks to the following open‑source projects:
+Thanks to the following open source projects:
 
-- [apache/datafusion](https://github.com/apache/datafusion) – high‑performance SQL query engine
-- [Tauri](https://tauri.app/) – modern desktop application framework
-- [React](https://reactjs.org/) – UI library
-- [HeroUI](https://heroui.com/) – modern UI component library
-- [datafusion-contrib](https://github.com/datafusion-contrib) – DataFusion extensions
-- GitHub: [@shencangsheng](https://github.com/shencangsheng)
+- [apache/datafusion](https://github.com/apache/datafusion) - High-performance SQL query engine
+- [Tauri](https://tauri.app/) - Modern desktop application framework
+- [React](https://reactjs.org/) - User interface library
+- [HeroUI](https://heroui.com/) - Modern UI component library
+- [datafusion-table-providers](https://github.com/apache/arrow-datafusion-table-providers) - DataFusion extension
+
+### Contributors
+
+<a href="https://github.com/shencangsheng/easydb_app/contributors">
+  <img src="https://contrib.rocks/image?repo=shencangsheng/easydb_app" /></a>
+
+## 📞 Contact Us
+
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/shencangsheng/easydb_app/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/shencangsheng/easydb_app/discussions)
+- 📧 **Email**: shencangsheng@126.com
+
+---

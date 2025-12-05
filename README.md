@@ -7,7 +7,7 @@
 **一个轻量级的桌面数据查询工具，使用 SQL 直接查询本地文件，内置查询引擎**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/yuhan0501/easydb_app_AI.git)
+[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](https://github.com/yuhan0501/easydb_app_AI)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey.svg)](https://github.com/shencangsheng/easydb_app)
 
 [English](README_EN.md) | [中文](README.md)
@@ -24,12 +24,15 @@ EasyDB 是一个轻量级桌面数据查询工具，基于 Rust 构建，可以�
 
 - 🚀 **高性能**: 基于 Rust 和 DataFusion 引擎，处理大型文件游刃有余
 - 💾 **低内存占用**: 仅需较少的硬件资源
-- 📁 **多格式支持**: CSV、NdJson、JSON、Excel、Parquet 文件格式
+- 📁 **多格式支持**: CSV、NdJson（行式 JSON）、Excel、Parquet 文件格式
 - 🔧 **开箱即用**: 无需文件转换，直接查询
 - 🖥️ **跨平台**: 支持 macOS 和 Windows 平台
 - 🎨 **现代界面**: 基于 Tauri 构建的现代化桌面应用
+- 🤖 **AI SQL 助手**: 支持根据自然语言生成 SQL，并在执行失败时自动尝试修复
+- 📂 **数据源面板**: 左侧 Sources 面板集中管理本地文件与 MySQL 数据源，支持字段预览与别名管理
+- 🧲 **拖拽生成 SQL**: 将文件拖入编辑区，可选择插入完整示例查询或 `read_xxx()` 函数调用
 - 🔍 **完整 SQL 支持**: 支持复杂 SQL 查询，包括 JOIN、子查询、窗口函数等高级特性
-- 📦 **AI SQL 助手**: 根据自然语言生成或修复 SQL
+
 ## 📖 更新日志
 
 [更新日志](CHANGELOG.md)
@@ -72,22 +75,6 @@ DataFusion 是 Apache Arrow 项目的一部分，提供了完整的 SQL 查询�
 **版本演进**: v1.0 版本曾使用 Polars 引擎，虽然 Polars 在流式计算和内存占用方面表现优异，但在复杂 SQL 查询支持上存在限制。v2.0 版本切换回 DataFusion，以获得更完整的 SQL 支持，同时保持了良好的性能和资源利用效率。
 
 ## 📚 使用指南
-
-## AI SQL 助手
-
-EasyDB 内置了一个可配置的 AI SQL 助手，通过调用 Tauri 后端暴露的 AI 命令，与任意兼容 OpenAI 的 chat/completions 接口对接。
-
-•  两种模式
-◦  ai（建议模式）：输入自然语言需求，自动生成 SQL
-◦  expert（专家模式）：更贴近原始 SQL / 精细控制
-•  两类核心能力
-◦  generateSqlWithModel：根据需求生成 SQL + 可选解释
-◦  repairSqlWithModel：对运行失败的 SQL 进行修复重写
-•  可配置的模型参数
-◦  Provider 类型（OpenAI 兼容）
-◦  Base URL、API Key
-◦  模型名（如 gpt-4o-mini 等）
-◦  温度、最大 Token、重试次数
 
 ### 基本语法
 
@@ -138,13 +125,7 @@ WHERE `age` > 30
 
 1. **下载安装包**
 
-   - 访问 [Releases](https://github.com/shencangsheng/easydb_app/releases) 页面
-   - 下载适合您系统的安装包
-
-2. **安装应用**
-
-   - **macOS**: 下载 `.dmg` 文件，拖拽到应用程序文件夹
-   - **Windows**: 下载 `.exe` 文件，运行安装程序
+   - 待完善
 
 ## ❓ 常见问题
 
@@ -218,14 +199,19 @@ SELECT * FROM table WHERE "id" = '1';
 
 ```bash
 # 克隆仓库
-git clone https://github.com/shencangsheng/easydb_app.git
-cd easydb_app
+git clone https://github.com/yuhan0501/easydb_app_AI.git
+cd easydb_app_AI
 
-# 启动开发服务器
-cargo tauri dev
+# 安装前端依赖
+npm install
 
-# 构建应用
-cargo tauri build
+# 启动前端 + 桌面壳开发环境
+npm run dev          # 启动 Vite 前端（浏览器预览）
+npm run tauri dev    # 启动 Tauri 桌面应用
+
+# 构建生产包
+npm run build        # 构建前端静态资源
+npm run tauri build  # 打包桌面应用（需要 Rust 工具链）
 ```
 
 ## 📄 许可证
@@ -233,12 +219,6 @@ cargo tauri build
 A short snippet describing the license (MIT)
 
 MIT © Cangsheng Shen
-
-## 👨‍💻 作者
-
-**Cangsheng Shen**
-
-- Email: shencangsheng@126.com
 
 ## 🙏 致谢
 
