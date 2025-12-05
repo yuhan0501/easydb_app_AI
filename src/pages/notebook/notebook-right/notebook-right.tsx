@@ -175,14 +175,9 @@ function NotebookRight({
   const handleAiSheetChange = aiPanelData?.handleAiSheetChange;
   const handleRemoveAiSource = aiPanelData?.handleRemoveAiSource;
   const handleAiSubmit = aiPanelData?.handleAiSubmit;
+  // 本地维护一个独立的提示词副本，避免父组件状态变更时重置光标位置
   const [localPrompt, setLocalPrompt] = useState(aiPrompt);
   const [isComposing, setIsComposing] = useState(false);
-
-  useEffect(() => {
-    if (!isComposing) {
-      setLocalPrompt(aiPrompt);
-    }
-  }, [aiPrompt, isComposing]);
 
   const commitPrompt = (value: string) => {
     setLocalPrompt(value);
