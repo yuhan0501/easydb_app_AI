@@ -4,6 +4,8 @@ use crate::context::schema::AppResult;
 use tokio::task;
 
 pub mod app;
+pub mod ai;
+pub mod files;
 pub mod query;
 pub mod utils;
 

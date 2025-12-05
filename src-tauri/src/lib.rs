@@ -1,4 +1,6 @@
+use crate::commands::ai::{ai_generate_sql, ai_repair_sql};
 use crate::commands::app::restart_app;
+use crate::commands::files::list_excel_sheets;
 use crate::commands::query::{fetch, sql_history, writer};
 use crate::commands::utils::open_url;
 use crate::utils::db_utils;
@@ -32,7 +34,10 @@ pub fn run() {
             open_url,
             restart_app,
             sql_history,
-            writer
+            writer,
+            list_excel_sheets,
+            ai_generate_sql,
+            ai_repair_sql
         ])
         .on_page_load(|window, _| {
             window.listen("tauri://error", |event| {
