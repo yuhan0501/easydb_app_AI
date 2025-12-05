@@ -144,7 +144,6 @@ function NotebookMiddle({
     sources: aiSources,
     setSources: setAiSources,
     updateSource,
-    setFilePicker,
   } = useAiDataSources();
   const aiSourcesRef = useRef<AiDataSource[]>([]);
 
@@ -969,12 +968,7 @@ function NotebookMiddle({
     onAiPanelDataChange,
   ]);
 
-  useEffect(() => {
-    setFilePicker(() => handleSelectAiDataSource);
-    return () => {
-      setFilePicker(undefined);
-    };
-  }, [handleSelectAiDataSource, setFilePicker]);
+  // 不再通过全局上下文注册 filePicker，避免在应用启动时被意外调用
 
   return (
     <div ref={dropAreaRef} style={containerStyle}>

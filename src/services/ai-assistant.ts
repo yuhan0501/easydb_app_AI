@@ -19,7 +19,10 @@ export interface AiRepairRequest extends AiGenerationRequest {
   attempt: number;
 }
 
-async function callTauriCommand<T>(command: string, payload: unknown): Promise<T> {
+async function callTauriCommand<T>(
+  command: string,
+  payload?: Record<string, unknown>
+): Promise<T> {
   try {
     return await invoke<T>(command, payload);
   } catch (error) {

@@ -28,8 +28,6 @@ interface AiDataSourcesContextValue {
   sources: AiDataSource[];
   setSources: React.Dispatch<React.SetStateAction<AiDataSource[]>>;
   updateSource: (id: string, patch: Partial<AiDataSource>) => void;
-  filePicker?: () => Promise<void>;
-  setFilePicker: (picker?: () => Promise<void>) => void;
 }
 
 const AiDataSourcesContext = createContext<
@@ -60,9 +58,6 @@ function loadSources(): AiDataSource[] {
 
 export function AiDataSourcesProvider({ children }: { children: ReactNode }) {
   const [sources, setSources] = useState<AiDataSource[]>(() => loadSources());
-  const [filePicker, setFilePicker] = useState<(() => Promise<void>) | undefined>(
-    undefined
-  );
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -89,10 +84,8 @@ export function AiDataSourcesProvider({ children }: { children: ReactNode }) {
       sources,
       setSources,
       updateSource,
-      filePicker,
-      setFilePicker,
     }),
-    [sources, updateSource, filePicker]
+    [sources, updateSource]
   );
 
   return (
